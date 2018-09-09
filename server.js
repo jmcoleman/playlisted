@@ -1,14 +1,16 @@
 /////////////////////////////////////////////////////////
 // use dotenv except in prod (where it is not needed)
 /////////////////////////////////////////////////////////
-var mysql = require('mysql');
+var mysql = require('mysql2');
 
-require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })  
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').load();
-} else if (process.env.JAWSDB_URL) {
+require('dotenv').config({ silent: process.env.NODE_ENV === 'production' });
+
+if (process.env.NODE_ENV === 'production') {
   connection = mysql.createConnection(process.env.JAWSDB_URL);
+} else {
+  require('dotenv').load();
 }
+console.log("Node env: " + process.env.NODE_ENV);
 
 //////////////////////////
 // dependencies
@@ -182,27 +184,30 @@ app.use(routes);
 // ***IMPORTANT***  use this for DEV while schema is in flux 
 // set force=true to override schema
 /////////////////////////////////////////////////////////////////
-db.sequelize
-    .query('SET FOREIGN_KEY_CHECKS = 0', null, {raw: true})
-    .then(function(results) {
-        db.sequelize.sync({force: true})
-        .then (function() {
-            db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', null, {raw: true})
-        })
-        .then(function() {
-            app.listen(app.get('port'), function() {
-                console.log("App now listening at localhost: " + app.get('port'));
-            });
-    });
-});
+// db.sequelize
+//     .query('SET FOREIGN_KEY_CHECKS = 0', null, {raw: true})
+//     .then(function(results) {
+//         db.sequelize.sync({force: true})
+//         .then (function() {
+//             db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', null, {raw: true})
+//         })
+//         .then(function() {
+//             app.listen(app.get('port'), function() {
+//                 console.log("App now listening at localhost: " + app.get('port'));
+//             });
+//     });
+// });
 
 ///////////////////////////////
 // use this for QA and PROD
 ///////////////////////////////
-// db.sequelize.sync({})
-//     .then(function() {
-//         app.listen(app.get('port'), function() {
-//             console.log("App now listening at localhost: " + app.get('port'));
-//         });  //.catch (function(error) { console.log(error); });
-//     });
+db.sequelize.sync({})
+    .then(function() {
+        app.listen(app.get('port'), function() {
+            console.log("App now listening at localhost: " + app.get('port'));
+        });
+    }).catch (function(error) { 
+      console.log("Unable to sync the database.", error); 
+    });
+
 
