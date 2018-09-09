@@ -39,21 +39,10 @@ $ npm install connect-flash --save
 $ npm install nodemailer --save
 $ npm install request --save
 
-npm install chai --save
-npm install chai-http --save
-
 ```
 Create an .env file at the root of the project and populate with connection info.
 
 ```
-# Heroku keys
-
-HEROKU_USERNAME=
-HEROKU_PASSWORD=
-HEROKU_DATABASE=
-HEROKU_HOST=
-HEROKU_PORT=3306
-
 # Local DB
 
 DB_DEV_USERNAME="ENTER_DB_USER_NAME_HERE"
@@ -82,7 +71,7 @@ N/A
 
 ## Versioning
 
-This is version 0.1
+This is version 0.5
 
 ## Authors
 
