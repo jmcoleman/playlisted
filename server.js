@@ -1,14 +1,10 @@
 // const debug = require('debug')('myApp:someComponent');
 // debug('Here is a pretty object %o', { someObject: true });
-
-/////////////////////////////////////////////////////////
-// use dotenv except in prod (where it is not needed)
-/////////////////////////////////////////////////////////
 var mysql = require('mysql2');
 
-///////////////////////////////////
+/////////////////////////////////////////////////////////
 // handle environment variables
-///////////////////////////////////
+/////////////////////////////////////////////////////////
 // use dotenv to read .env vars into Node but silence the Heroku log error for production as no .env will exist
 require('dotenv').config( { silent: process.env.NODE_ENV === 'production' } );
 
@@ -24,6 +20,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 // console.log("process env: " + JSON.stringify(process.env,null,'\t'));
 
+
 //////////////////////////
 // dependencies
 //////////////////////////
@@ -38,8 +35,7 @@ var passport = require('passport');
 // var fs = require('fs');
 // var https = require('https');
 
-// models are required to sync them
-var db = require("./models");
+var db = require("./models");                               // models are required to sync them
 var expressValidator = require('express-validator');
 
 ///////////////////////
@@ -77,6 +73,38 @@ app.use(session({
   resave: true
 }));
 
+///////////////////////////
+// Express validator
+///////////////////////////
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
+// connect-flash (for messages stored in session)
+app.use(flash());
+
+// global vars for messages to be returned to the client
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
+  next();
+});
+
 ///////////////////////
 //Passport Config
 ///////////////////////
@@ -85,7 +113,6 @@ app.use(session({
 
 var request = require('request');
 var querystring = require('querystring');
-
 // Passport init
 // app.use(passport.initialize());
 // app.use(passport.session());
@@ -148,37 +175,36 @@ passport.use(
 );
 */ 
 
-///////////////////////////
-// Express validator
-///////////////////////////
-app.use(expressValidator({
-  errorFormatter: function(param, msg, value) {
-      var namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root;
 
-    while(namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
-    }
-    return {
-      param : formParam,
-      msg   : msg,
-      value : value
-    };
-  }
-}));
+/*
+//Spotify constructors
 
-// connect-flash (for messages stored in session)
-app.use(flash());
+var spotify = {
+  id: process.env.SPOTIFY_ID,
+  secret: process.env.SPOTIFY_SECRET
+};
 
-// global vars for messages to be returned to the client
-app.use(function (req, res, next) {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
-  res.locals.user = req.user || null;
-  next();
-});
+
+function displaySpotify() {
+  var spotify = new Spotify(config.spotify);
+  spotify.search({type: 'track', query: arg2, limit: 3}, function(error, data) {
+      if (error) {
+          return console.log("Error while retrieving a user's song: " + error);
+      } else {
+          console.log("Here are some songs that matched your search: ");
+          for (var i = 0; i <= 2; i++) {
+              var songInfo = data.tracks.items[i];
+              console.log("-----------------------------------------" +
+                          "\nArtists: " + songInfo.artists[0].name + 
+                          "\nSong: " + songInfo.name +
+                          "\nPreview: " + songInfo.external_urls.spotify +
+                          "\nAlbum: " + songInfo.album.name);
+          }
+          
+      }
+  });
+}
+*/
 
 ////////////////////////////////////////////////////////
 // Import routes and give the server access to them.
