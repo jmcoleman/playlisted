@@ -9,12 +9,13 @@ var config    = require(__dirname + '/../config/config.js')[env];
 var db        = {};
 
 //sequelize constructors
-//TODO - comment this
+// console.log("config is: " + JSON.stringify(config));
 if (config.use_env_variable) {
   var sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
   var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+// console.log("database: " + config.database + "\nusername: " + config.username + "\npassword: " + config.password + "\nconfig: " +  JSON.stringify(config,null,'\t'));
 
 fs
   .readdirSync(__dirname)

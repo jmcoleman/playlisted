@@ -1,16 +1,28 @@
+// const debug = require('debug')('myApp:someComponent');
+// debug('Here is a pretty object %o', { someObject: true });
+
 /////////////////////////////////////////////////////////
 // use dotenv except in prod (where it is not needed)
 /////////////////////////////////////////////////////////
 var mysql = require('mysql2');
 
-require('dotenv').config({ silent: process.env.NODE_ENV === 'production' });
+///////////////////////////////////
+// handle environment variables
+///////////////////////////////////
+// use dotenv to read .env vars into Node but silence the Heroku log error for production as no .env will exist
+require('dotenv').config( { silent: process.env.NODE_ENV === 'production' } );
 
+// process.env.NODE_ENV is set by heroku with a default value of production
 if (process.env.NODE_ENV === 'production') {
+  console.log("in PROD");
+  // connect to the JawsDB on heroku
   connection = mysql.createConnection(process.env.JAWSDB_URL);
 } else {
+  console.log("in DEV");
+  // use the connection info from the .env file otherwise
   require('dotenv').load();
 }
-console.log("Node env: " + process.env.NODE_ENV);
+// console.log("process env: " + JSON.stringify(process.env,null,'\t'));
 
 //////////////////////////
 // dependencies
@@ -20,10 +32,9 @@ var bodyParser = require("body-parser");
 var session = require('express-session');
 var path = require('path');
 
-var passport = require('passport');
 var cookieParser = require('cookie-parser');
-var session = require('express-session');
 var flash = require('connect-flash');
+var passport = require('passport');
 // var fs = require('fs');
 // var https = require('https');
 
@@ -59,8 +70,9 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Expess Session
+// console.log("secret: " +  process.env.SECRET_KEY);
 app.use(session({
-  secret: 'secret',
+  secret: process.env.SECRET_KEY,     // put this in the heroku environment variables
   saveUninitialized: true,
   resave: true
 }));
@@ -156,10 +168,10 @@ app.use(expressValidator({
   }
 }));
 
-// connect flash (for messages stored in session)
+// connect-flash (for messages stored in session)
 app.use(flash());
 
-// Global Vars
+// global vars for messages to be returned to the client
 app.use(function (req, res, next) {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
