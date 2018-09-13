@@ -61,11 +61,29 @@ app.use(express.static(__dirname + '/public/assets/img'));
 /////////////////
 var exphbs = require("express-handlebars");
 
+// handlebar views
 app.set('views', path.join(__dirname, 'views'));
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+var hbs  = require('./views/helpers/handlebars.js')(exphbs);
+
+
+// hbs.registerHelper("formatDate", function(datetime, format) {
+//   if (moment) {
+//     // can use other formats like 'lll' too
+//     format = DateFormats[format] || format;
+//     return moment(datetime).format(format);
+//   }
+//   else {
+//     return datetime;
+//   }
+// });
+
+// app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
+/////////////////////
 // Expess Session
+/////////////////////
 // console.log("secret: " +  process.env.SECRET_KEY);
 app.use(session({
   secret: process.env.SECRET_KEY,     // put this in the heroku environment variables

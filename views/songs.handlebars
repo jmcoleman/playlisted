@@ -1,7 +1,235 @@
 <header class="header">
-  <h1>Available Songs</h1>
+  <h1>Song Library</h1>
 </header>
-<div class="formcontainer list">
+
+<div class="container-fluid">
+  <div class="row mt-2">
+
+    <div class="col-lg-7">
+      <div class="card bg-transparent">
+
+        <div class="card-header text-white">
+            <h3 class="card-title m-0 p-0">All Songs</h3>
+        </div>
+
+        <div class="card-body text-white m-0 p-0">
+
+          <div class="table-responsive">
+            <table class="table">
+              {{!-- <caption>Song Listing</caption> --}}
+              <thead class="">
+                  <tr>
+                      <th scope="col">Id</th>
+                      <th scope="col">Song Title</th>
+                      <th scope="col">Artist Name</th>
+                      <th scope="col">Date Released</th>
+                      <th scope="col">Mood</th>
+                      <th scope="col">Energy</th>
+                      <th scope="col">Genre</th>
+                      <th scope="col" hidden>Create Date</th>
+                      <th scope="col" hidden>Update Date</th>
+                      <th scope="col"></th>
+                  </tr>
+              </thead>
+              <tbody>  
+
+                {{#if songs}}
+                {{#each songs as |item index|}}
+                  <tr>
+                      <td id="song-id-item">{{song_id}}.</td>
+                      <td id="song-title-item">{{song_title}}</td>
+                      <td id="artist-name-item">{{artist_name}}</td>
+                      <td id="date-released-item">{{date_released}}</td>
+                      <td id="mood-item">{{mood}}</td>
+                      <td id="energy-item">{{energy}}</td>
+                      <td id="genre-item">{{genre}}</td>
+                      <td id="create-date-item" hidden>{{created_at}}</td>
+                      <td id="modify-date-item" hidden>{{updated_at}}</td>
+                      <td id="btns">
+                        <button class="delete-song btn-sm" data-id="{{this.song_id}}">Delete</button>
+                      </td>
+                  </tr>
+                {{/each}}
+                {{/if}} 
+
+                {{#if song}}
+                {{#each song as |item index|}}
+                  <tr>
+                      <td id="song-id-item">{{song_id}}.</td>
+                      <td id="song-title-item">{{song_title}}</td>
+                      <td id="artist-name-item">{{artist_name}}</td>
+                      <td id="date-released-item">{{date_released}}</td>
+                      <td id="mood-item">{{mood}}</td>
+                      <td id="energy-item">{{energy}}</td>
+                      <td id="genre-item">{{genre}}</td>
+                      <td id="create-date-item" hidden>{{created_at}}</td>
+                      <td id="modify-date-item" hidden>{{updated_at}}</td>
+                      <td id="btns">
+                        <button class="delete-song btn-sm" data-id="{{this.song_id}}">Delete</button>
+                      </td>
+                  </tr>
+                {{/each}}
+                {{/if}} 
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="col-lg-1">
+    </div>
+
+    <!-- ADD/UPDATE USERS section -->
+    <div class="col-lg-4">
+
+      <!-- ADD SONGS -->
+      <div class="formcontainer m-0 p-0">
+        <h3>Create Song</h3>
+        <form id="form-new-song">
+          <div>
+            <div class="form-group">
+              <label for="songtitle">Song Title</label>
+              <input id="songtitle" type="text" name="song_title" placeholder="Song Title..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="artistname">Artist Name</label>
+              <input id="artistname" type="text" name="artist_name" placeholder="Artist Name..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="datereleased">Date Released</label>
+              <input id="datereleased" type="date" name="date_released" placeholder="Date Released..." class="form-control">
+            </div>
+          </div>
+          <div>
+            <div class="form-group">
+              <label for="mood">Mood</label>
+              <select id="mood" name="mood" placeholder="Mood..." class="form-control">
+                <option selected disabled>Mood</option>
+                <option>Angry</option>
+                <option>Sad</option>
+                <option>Meh</option>
+                <option>Happy</option>
+                <option>Ecstatic</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="energy">Energy</label>
+              <select id="energy" name="energy" placeholder="Energy..." class="form-control">
+                <option selected disabled>Energy</option>
+                <option>0.1</option>
+                <option>0.2</option>
+                <option>0.3</option>
+                <option>0.4</option>
+                <option>0.5</option>
+                <option>0.6</option>
+                <option>0.7</option>
+                <option>0.8</option>
+                <option>0.9</option>
+                <option>1.0</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="genre">Genre</label>
+              <select id="genre" name="genre" placeholder="Genre..." class="form-control">
+                <option selected disabled>Genre</option>
+                <option>Rock</option>
+                <option>Classical</option>
+                <option>Easy Listening</option>
+                <option>Pop</option>
+                <option>Rap/Hip-Hop</option>
+                <option>Unknown</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+
+      <hr class="bg-white my-4">
+
+      <!-- UPDATE SONG section -->
+      <div class="formcontainer m-0 p-0">
+        <h3>Update Song</h3>
+        <form id="form-update-song">
+          <div>
+            <div class="form-group">
+              <label for="songid_update">Id</label>
+              <input id="songid_update" type="text" name="song_id" placeholder="Id..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="songtitle_update">Song Title</label>
+              <input id="songtitle" type="text" name="song_title" placeholder="Song Title..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="artistname_update">Artist Name</label>
+              <input id="artistname_update" type="text" name="artist_name" placeholder="Artist Name..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="datereleased_update">Date Released</label>
+              <input id="datereleased_update" type="date" name="date_released" placeholder="Date Released..." class="form-control">
+            </div>
+          </div>
+          <div>
+            <div class="form-group">
+              <label for="mood_update">Mood</label>
+              <select id="mood_update" name="mood" placeholder="Mood..." class="form-control">
+                <option selected disabled>Mood</option>
+                <option>Angry</option>
+                <option>Sad</option>
+                <option>Meh</option>
+                <option>Happy</option>
+                <option>Ecstatic</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="energy_update">Energy</label>
+              <select id="energy_update" name="energy" placeholder="Energy..." class="form-control">
+                <option selected disabled>Energy</option>
+                <option>0.1</option>
+                <option>0.2</option>
+                <option>0.3</option>
+                <option>0.4</option>
+                <option>0.5</option>
+                <option>0.6</option>
+                <option>0.7</option>
+                <option>0.8</option>
+                <option>0.9</option>
+                <option>1.0</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="genre_update">Genre</label>
+              <select id="genre_update" name="genre" placeholder="Genre..." class="form-control">
+                <option selected disabled>Genre</option>
+                <option>Rock</option>
+                <option>Classical</option>
+                <option>Easy Listening</option>
+                <option>Pop</option>
+                <option>Rap/Hip-Hop</option>
+                <option>Unknown</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+
+  </div>
+</div>
+
+{{!-- <div class="formcontainer list">
   {{#if songs}}
     <div class="song-content">
       <h3>Songs</h3>
@@ -25,97 +253,4 @@
       </ul>
     </div>
   {{/if}}
-</div>
-
-<div class="formcontainer">
-  <h3>Create Song</h3>
-  <form id="form-new-song">
-    <div>
-      <input type="text" name="song_title" placeholder="Song Title...">
-      <input type="text" name="artist_name" placeholder="Artist Name...">
-      <input type="date" name="date_released" placeholder="Date Released...">
-    </div>
-    <div>
-      <select name="mood" placeholder="Mood...">
-        <option selected disabled>Mood</option>
-        <option>Angry</option>
-        <option>Sad</option>
-        <option>Meh</option>
-        <option>Happy</option>
-        <option>Ecstatic</option>
-      </select>
-      <select name="energy" placeholder="Energy...">
-        <option selected disabled>Energy</option>
-        <option>0.1</option>
-        <option>0.2</option>
-        <option>0.3</option>
-        <option>0.4</option>
-        <option>0.5</option>
-        <option>0.6</option>
-        <option>0.7</option>
-        <option>0.8</option>
-        <option>0.9</option>
-        <option>1.0</option>
-      </select>
-      <select name="genre" placeholder="Genre...">
-        <option selected disabled>Genre</option>
-        <option>Rock</option>
-        <option>Classical</option>
-        <option>Easy Listening</option>
-        <option>Pop</option>
-        <option>Rap/Hip-Hop</option>
-        <option>Unknown</option>
-      </select>
-    </div>
-    <div>
-      <button type="submit">Submit</button>
-    </div>
-  </form>
-</div>
-
-<div class="formcontainer">
-  <h3>Update Song</h3>
-  <form id="form-update-song">
-    <div>
-      <input type="text" name="song_id" placeholder="Id..." value="">
-      <input type="text" name="song_title" placeholder="Song Title...">
-      <input type="text" name="artist_name" placeholder="Artist Name...">
-      <input type="date" name="date_released" placeholder="Date Released...">
-    </div>
-    <div>
-      <select name="mood" placeholder="Mood...">
-        <option selected disabled>Mood</option>
-        <option>Angry</option>
-        <option>Sad</option>
-        <option>Meh</option>
-        <option>Happy</option>
-        <option>Ecstatic</option>
-      </select>
-      <select name="energy" placeholder="Energy...">
-        <option selected disabled>Energy</option>
-        <option>0.1</option>
-        <option>0.2</option>
-        <option>0.3</option>
-        <option>0.4</option>
-        <option>0.5</option>
-        <option>0.6</option>
-        <option>0.7</option>
-        <option>0.8</option>
-        <option>0.9</option>
-        <option>1.0</option>
-      </select>
-      <select name="genre" placeholder="Genre...">
-        <option selected disabled>Genre</option>
-        <option>Rock</option>
-        <option>Classical</option>
-        <option>Easy Listening</option>
-        <option>Pop</option>
-        <option>Rap/Hip-Hop</option>
-        <option>Unknown</option>
-      </select>
-    </div>
-    <div>
-      <button type="submit">Submit</button>
-    </div>
-  </form>
-</div>
+</div> --}}
