@@ -1,57 +1,129 @@
 
-<header class="header">
+<div class="header">
   <h1>My Playlists</h1>
-</header>
-<div class="formcontainer list">
-  {{#if playlists}}
-    <div class="user-content">
-      <h3>Playlists</h3>
-      <ul>
-        {{#each playlists}}
-          {{> playlist-block}}
-        {{/each}}
-      </ul>
-    </div>
-  {{/if}}
 </div>
 
-<div class="formcontainer list">
-  {{#if playlist}}
-    <div class="playlist-content-single">
-      <h3>Playlist</h3>
-      <ul>
-        {{#each playlist}}
-          {{> playlist-block}}
-        {{/each}}
-      </ul>
-    </div>
-  {{/if}}
-</div>
+<div class="container-fluid">
+  <div class="row mt-2">
 
-<div class="formcontainer">
-  <h3>Create Playlist</h3>
-  <!--form id="form-new-playlist" method="POST" action="/api/playlists" class="create-user-form"-->
-  <form id="form-new-playlist">
-    <div>
-      <input type="text" name="playlist_name" placeholder="Name...">
-      <input type="text" name="user_id" placeholder="User id...">
-    </div>
-    <div>
-      <button type="submit">Submit</button>
-    </div>
-  </form>
-</div>
+    <!-- SHOW PLAYLISTS section -->
+    <div class="col-lg-7">
+      <div class="card bg-transparent">
 
-<div class="formcontainer">
-  <h3>Update Playlist</h3>
-  <form id="form-update-playlist">
-    <div>
-      <input type="text" name="id" placeholder="Id...">
-      <input type="text" name="playlist_name" placeholder="Name...">
-      <input type="text" name="user_id" placeholder="User id...">
+        <div class="card-header text-white">
+            <h3 class="card-title m-0 p-0">Playlists</h3>
+        </div>
+
+        <div class="card-body text-white m-0 p-0">
+
+          <div class="table-responsive">
+            <table class="table">
+              {{!-- <caption>Playlists</caption> --}}
+              <thead class="">
+                  <tr>
+                      <th scope="col">Playlist Id</th>
+                      <th scope="col">Playlist Name</th>
+                      <th scope="col">User Id</th>
+                      <th scope="col">Create Date</th>
+                      <th scope="col">Update Date</th>
+                      <th scope="col"></th>
+                  </tr>
+              </thead>
+              <tbody>  
+                  
+                {{#if playlists}} 
+                {{#each playlists}} 
+                  <tr>
+                      <td id="playlist-id-item">{{playlist_id}}.</td>
+                      <td id="playlist-name-item">{{playlist_name}}</td>
+                      <td id="user-id-item">{{user_id}}</td>
+                      <td id="create-date-item">{{created_at}}</td>
+                      <td id="modify-date-item">{{updated_at}}</td>
+                      <td id="btns">
+                        <button class="delete-playlist btn-sm" data-id="{{this.playlist_id}}">Delete</button>
+                      </td>
+                  </tr>
+                {{/each}}
+                {{/if}} 
+
+                {{#if playlist}} 
+                {{#each playlist}}   
+                  <tr>
+                      <td id="playlist-id-item">{{playlist_id}}.</td>
+                      <td id="playlist-name-item">{{playlist_name}}</td>
+                      <td id="user-id-item">{{user_id}}</td>
+                      <td id="create-date-item">{{created_at}}</td>
+                      <td id="modify-date-item">{{updated_at}}</td>
+                      <td id="btns">
+                        <button class="delete-playlist btn-sm" data-id="{{this.playlist_id}}">Delete</button>
+                      </td>
+                  </tr>
+                {{/each}}
+                {{/if}} 
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
     </div>
-    <div>
-      <button type="submit">Update</button>
+
+    <!-- DIVIDER -->
+    <div class="col-lg-1">
     </div>
-  </form>
+
+    <!-- ADD/UPDATE PLAYLIST section -->
+    <div class="col-lg-4">
+
+      <!-- ADD PLAYLIST section -->
+      <div class="formcontainer m-0 p-0">
+        <h3>Create Playlist</h3>
+        <form id="form-new-playlist">
+          <div>
+              <div class="form-group">
+                <label for="playlistname">Playlist Name</label>
+                <input id="playlistname" type="text" name="playlist_name" placeholder="Playlist Name..." class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="userid">User Id</label>
+                <input id="userid" type="text" name="user_id" placeholder="User id..." class="form-control">
+              </div>
+          </div>
+          <div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+
+      <hr class="bg-white my-4">
+
+      <!-- UPDATE PLAYLIST section -->
+      <div class="formcontainer m-0 p-0">
+        <h3>Update Playlist</h3>
+        <form id="form-update-playlist">
+          <div>
+            <div class="form-group">
+              <label for="playlistid_update">Playlist Id</label>
+              <input id="playlistid_update" type="text" name="id" placeholder="Playlist Id..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="playlistname_update">Playlist Name</label>
+              <input id="playlistname_update" type="text" name="playlist_name" placeholder="Playlist Name..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="userid_update">User Id</label>
+              <input id="userid_update" type="text" name="user_id" placeholder="User id..." class="form-control">
+            </div>
+          </div>
+          <div>
+            <button type="submit">Update</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
 </div>

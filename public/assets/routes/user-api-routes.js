@@ -113,14 +113,9 @@ module.exports = function(app) {
       res.json(dbResult);          // send as json
 
     }).catch(function (err) {
-      console.log("do we get here: " + err);
-
-      var errors = err.messageId + ": " + err.toString();
-
       // res.redirect('/sign-up');
 
       // send to handlebars
-
       var hbsObject = {
         users: req.body
       };
@@ -247,16 +242,14 @@ module.exports = function(app) {
 
           if (err) {
             console.log("catch login error: " + err);
-            var errors = err.messageId + ": " + err.toString();
           } else {
-            console.log("catch login error!");
+            console.log("No err in catch login error!");
           }
     
           // send to handlebars
             var hbsObject = {
             users: req.body
           };
-          // req.flash('error_msg', err.toString());
           req.flash('error_msg', "No user found");
           res.render("login", hbsObject);
         });
