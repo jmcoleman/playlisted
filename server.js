@@ -1,14 +1,25 @@
-/////////////////////////////////////////////////////////
-// use dotenv except in prod (where it is not needed)
-/////////////////////////////////////////////////////////
-var mysql = require('mysql');
+// const debug = require('debug')('myApp:someComponent');
+// debug('Here is a pretty object %o', { someObject: true });
+var mysql = require('mysql2');
 
-require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })  
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').load();
-} else if (process.env.JAWSDB_URL) {
+/////////////////////////////////////////////////////////
+// handle environment variables
+/////////////////////////////////////////////////////////
+// use dotenv to read .env vars into Node but silence the Heroku log error for production as no .env will exist
+require('dotenv').config( { silent: process.env.NODE_ENV === 'production' } );
+
+// process.env.NODE_ENV is set by heroku with a default value of production
+if (process.env.NODE_ENV === 'production') {
+  console.log("in PROD");
+  // connect to the JawsDB on heroku
   connection = mysql.createConnection(process.env.JAWSDB_URL);
+} else {
+  console.log("in DEV");
+  // use the connection info from the .env file otherwise
+  require('dotenv').load();
 }
+// console.log("process env: " + JSON.stringify(process.env,null,'\t'));
+
 
 //////////////////////////
 // dependencies
@@ -18,15 +29,13 @@ var bodyParser = require("body-parser");
 var session = require('express-session');
 var path = require('path');
 
-var passport = require('passport');
 var cookieParser = require('cookie-parser');
-var session = require('express-session');
 var flash = require('connect-flash');
+var passport = require('passport');
 // var fs = require('fs');
 // var https = require('https');
 
-// models are required to sync them
-var db = require("./models");
+var db = require("./models");                               // models are required to sync them
 var expressValidator = require('express-validator');
 
 ///////////////////////
@@ -52,16 +61,67 @@ app.use(express.static(__dirname + '/public/assets/img'));
 /////////////////
 var exphbs = require("express-handlebars");
 
+// handlebar views
 app.set('views', path.join(__dirname, 'views'));
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+var hbs  = require('./views/helpers/handlebars.js')(exphbs);
+
+
+// hbs.registerHelper("formatDate", function(datetime, format) {
+//   if (moment) {
+//     // can use other formats like 'lll' too
+//     format = DateFormats[format] || format;
+//     return moment(datetime).format(format);
+//   }
+//   else {
+//     return datetime;
+//   }
+// });
+
+// app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
+/////////////////////
 // Expess Session
+/////////////////////
+// console.log("secret: " +  process.env.SECRET_KEY);
 app.use(session({
-  secret: 'secret',
+  secret: process.env.SECRET_KEY,     // put this in the heroku environment variables
   saveUninitialized: true,
   resave: true
 }));
+
+///////////////////////////
+// Express validator
+///////////////////////////
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
+// connect-flash (for messages stored in session)
+app.use(flash());
+
+// global vars for messages to be returned to the client
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
+  next();
+});
 
 ///////////////////////
 //Passport Config
@@ -71,7 +131,6 @@ app.use(session({
 
 var request = require('request');
 var querystring = require('querystring');
-
 // Passport init
 // app.use(passport.initialize());
 // app.use(passport.session());
@@ -134,37 +193,36 @@ passport.use(
 );
 */ 
 
-///////////////////////////
-// Express validator
-///////////////////////////
-app.use(expressValidator({
-  errorFormatter: function(param, msg, value) {
-      var namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root;
 
-    while(namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
-    }
-    return {
-      param : formParam,
-      msg   : msg,
-      value : value
-    };
-  }
-}));
+/*
+//Spotify constructors
 
-// connect flash (for messages stored in session)
-app.use(flash());
+var spotify = {
+  id: process.env.SPOTIFY_ID,
+  secret: process.env.SPOTIFY_SECRET
+};
 
-// Global Vars
-app.use(function (req, res, next) {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
-  res.locals.user = req.user || null;
-  next();
-});
+
+function displaySpotify() {
+  var spotify = new Spotify(config.spotify);
+  spotify.search({type: 'track', query: arg2, limit: 3}, function(error, data) {
+      if (error) {
+          return console.log("Error while retrieving a user's song: " + error);
+      } else {
+          console.log("Here are some songs that matched your search: ");
+          for (var i = 0; i <= 2; i++) {
+              var songInfo = data.tracks.items[i];
+              console.log("-----------------------------------------" +
+                          "\nArtists: " + songInfo.artists[0].name + 
+                          "\nSong: " + songInfo.name +
+                          "\nPreview: " + songInfo.external_urls.spotify +
+                          "\nAlbum: " + songInfo.album.name);
+          }
+          
+      }
+  });
+}
+*/
 
 ////////////////////////////////////////////////////////
 // Import routes and give the server access to them.
@@ -182,27 +240,30 @@ app.use(routes);
 // ***IMPORTANT***  use this for DEV while schema is in flux 
 // set force=true to override schema
 /////////////////////////////////////////////////////////////////
-db.sequelize
-    .query('SET FOREIGN_KEY_CHECKS = 0', null, {raw: true})
-    .then(function(results) {
-        db.sequelize.sync({force: true})
-        .then (function() {
-            db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', null, {raw: true})
-        })
-        .then(function() {
-            app.listen(app.get('port'), function() {
-                console.log("App now listening at localhost: " + app.get('port'));
-            });
-    });
-});
+// db.sequelize
+//     .query('SET FOREIGN_KEY_CHECKS = 0', null, {raw: true})
+//     .then(function(results) {
+//         db.sequelize.sync({force: true})
+//         .then (function() {
+//             db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', null, {raw: true})
+//         })
+//         .then(function() {
+//             app.listen(app.get('port'), function() {
+//                 console.log("App now listening at localhost: " + app.get('port'));
+//             });
+//     });
+// });
 
 ///////////////////////////////
 // use this for QA and PROD
 ///////////////////////////////
-// db.sequelize.sync({})
-//     .then(function() {
-//         app.listen(app.get('port'), function() {
-//             console.log("App now listening at localhost: " + app.get('port'));
-//         });  //.catch (function(error) { console.log(error); });
-//     });
+db.sequelize.sync({})
+    .then(function() {
+        app.listen(app.get('port'), function() {
+            console.log("App now listening at localhost: " + app.get('port'));
+        });
+    }).catch (function(error) { 
+      console.log("Unable to sync the database.", error); 
+    });
+
 

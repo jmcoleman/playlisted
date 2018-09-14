@@ -1,5 +1,7 @@
 <script type="text/javascript" src="/assets/js/app.js"></script>
-<div class="col-lg-12 col-sm-12 content">
+
+<div id="criteria-content" class="col-lg-12 col-sm-12 content">
+    {{!-- <form id="formGenre"> --}}
     <div class="slidecontainer">
         <h3 style="text-align: center">MOOD</h3>
         <div class="scroll-img mood">
@@ -21,7 +23,7 @@
     </div>
     <div class="genrecontainer">
         <h3 style="text-align: center">GENRE</h3>
-        <form action="/action_page.php" id="formGenre">
+        <form id="formGenre">
             <select id="myGenre" name="genre">
                 <option value="All" selected>All</option>
                 <option value="Classical">Classical</option>
@@ -31,30 +33,31 @@
                 <option value="Rap/Hip-Hop">Rap/Hip-Hop</option>
                 <option value="Unknown">Unknown</option>
             </select>
-            <input type="submit" value="Listen" data-toggle="modal" data-target="#myModal" id="meg" class="submitButton">
+            <input value="Listen" data-toggle="modal" data-target="#myModal" class="submitButton">
         </form>
     </div>
-  
-    <!-- Modal -->
-    <div id="myModal" class="modal" role="dialog">
-        <div class="modal-dialog modal-md">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" style="text-align:center;width:100%;">HERE'S YOUR PLAYLIST!</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body user">
-                    <p id="mood"></p>
-                    <p id="energy"></p>
-                    <p id="genre"></p>
-                </div>
-                <div class="modal-body">
-                    <p id="playlist"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+    {{!-- </form> --}}
+  </div>
+
+<!-- Modal -->
+<div id="myModal" class="modal" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align:center;width:100%;">HERE'S YOUR PLAYLIST!</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body user">
+                <p id="mood"></p>
+                <p id="energy"></p>
+                <p id="genre"></p>
+            </div>
+            <div class="modal-body">
+                <p id="modal-playlist"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

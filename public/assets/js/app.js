@@ -2,7 +2,7 @@
 //						PULL SONG					   //
 //=====================================================//
 $(document).ready(function() {
-	$(".submitButton").on("click", function() {
+	$("#criteria-content .submitButton").on("click", function() {
 		var moodInput = "";
 		var value = $("#myMood").val();
 		if (value == 1) {
@@ -20,27 +20,31 @@ $(document).ready(function() {
 		if (value == 5) {
 			moodInput = "Ecstatic";
 		};
-		// console.log(moodInput);
+		console.log(moodInput);
 		var energyInput = $("#myEnergy").val();
-		// console.log(energyInput);
+		console.log(energyInput);
 		var genreInput = $("#myGenre").val();
-		// console.log(genreInput);
+		console.log(genreInput);
 		if (genreInput === "All") {
 			$.ajax({
 				url:'api/songs',
 				type:'GET',
+				// context:this,
 				success: function(data){
 					data=$(data).find("[data-mood='" + moodInput + "'][data-energy='" + energyInput + "']");
-					$('#playlist').html($(data));
+					console.log(data);
+					// $("#myModal").modal("toggle");
+					$('#modal-playlist').html(data);
 				}
 			});
 		} else {
 			$.ajax({
 				url:'api/songs',
 				type:'GET',
+				// context:this,
 				success: function(data){
 					data=$(data).find("[data-mood='" + moodInput + "'][data-energy='" + energyInput + "'][data-genre='" + genreInput + "']");
-					$('#playlist').html($(data));
+					$('#modal-playlist').html($(data));
 				}
 			});
 		}

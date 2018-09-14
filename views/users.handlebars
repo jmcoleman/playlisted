@@ -1,65 +1,160 @@
+<header class="header">
+  <h1>Registered Users</h1>
+</header>
 
-  <header class="header">
-    <h1>Registered Users</h1>
-  </header>
+<div class="container-fluid">
+  <div class="row mt-2">
 
-  {{#if users}}
-    <div class="user-content">
-      <h3>Users</h3>
-        <ul>
-        {{#each users}}
-          {{> user-block}}
-        {{/each}}
-        </ul>
-    </div>
-  {{/if}}
+    <!-- SHOW USERS section -->
+    <div class="col-lg-7">
+      <div class="card bg-transparent">
 
-  {{#if user}}
-    <div class="user-content-single">
-      <h3>User</h3>
-        <ul>
-          {{#each user}}
-            {{> user-block}}
-          {{/each}}
-        </ul>
-    </div>
-  {{/if}}
+        <div class="card-header text-white">
+            <h3 class="card-title m-0 p-0">Users</h3>
+        </div>
 
-<h3>Add User</h3>
-<div class="formcontainer">
-  <!--form id="form-new-user" method="POST" action="/api/users" class="create-user-form"-->
-  <form id="form-new-user">
-    <div>
-      <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" id="usernamne" name="user_name" placeholder="Name..." class="form-control" maxlength="50" required autofocus>
+        <div class="card-body text-white m-0 p-0">
+
+          <div class="table-responsive">
+            <table class="table">
+              {{!-- <caption>Updated Playlisted Users</caption> --}}
+              <thead class="">
+                  <tr>
+                      <th scope="col">Id</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col" hidden>Password</th>
+                      <th scope="col">Create Date</th>
+                      <th scope="col">Update Date</th>
+                      <th scope="col"></th>
+                  </tr>
+              </thead>
+              <tbody>  
+                  
+                {{#if users}} 
+                {{#each users}} 
+                  <tr>
+                      <td id="user-item">{{user_id}}.</td>
+                      <td id="user-name-item">{{user_name}}</td>
+                      <td id="email-item">{{user_email}}</td>
+                      <td id="password-item" hidden>{{user_password}}</td>
+                      <td id="create-date-item">{{created_at}}</td>
+                      <td id="modify-date-item">{{updated_at}}</td>
+                      <td id="btns">
+                        <button class="delete-user btn-sm" data-id="{{this.user_id}}">Delete</button>
+                      </td>
+                  </tr>
+                {{/each}}
+                {{/if}} 
+
+                {{#if user}} 
+                {{#each user}}   
+                  <tr>
+                      <td id="user-item">{{user_id}}.</td>
+                      <td id="user-name-item">{{user_name}}</td>
+                      <td id="email-item">{{user_email}}</td>
+                      <td id="password-item" hidden>{{user_password}}</td>
+                      <td id="create-date-item">{{created_at}}</td>
+                      <td id="modify-date-item">{{updated_at}}</td>
+                      <td id="btns">
+                        <button class="delete-user btn-sm" data-id="{{this.user_id}}">Delete</button>
+                      </td>
+                  </tr>
+                {{/each}}
+                {{/if}} 
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
       </div>
-      <div class="form-group">
-        <label for="useremail">Email</label>
-        <input type="text" id="useremail" name="user_email" placeholder="Email..." class="form-control">
-      </div>
-      <div class="form-group">
-          <label for="userpassword">Password</label>
-          <input type="text" id="userpassword" name="user_password" placeholder="Password..." class="form-control">
-      </div>
     </div>
-    <div>
-      <button type="submit">Submit</button>
+
+    <!-- DIVIDER -->
+    <div class="col-lg-1">
     </div>
-  </form>
+
+    <!-- ADD/UPDATE USERS section -->
+    <div class="col-lg-4">
+
+      <!-- ADD USERS section -->
+      <div class="formcontainer m-0 p-0" hidden>
+        <h3>Add User</h3>
+        <form id="form-new-user">
+          <div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="user_name" placeholder="Name..." class="form-control" maxlength="50" required autofocus>
+            </div>
+            <div class="form-group">
+              <label for="useremail">Email</label>
+              <input type="text" id="useremail" name="user_email" placeholder="Email..." class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="userpassword">Password</label>
+                <input type="text" id="userpassword" name="user_password" placeholder="Password..." class="form-control">
+            </div>
+          </div>
+          <div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- UPDATE USER section -->
+      <div class="formcontainer m-0 p-0">
+        <h3>Update User</h3>
+        <form id="form-update-user">
+          <div>
+            <div class="form-group">
+              <label for="userid_update">Id</label>
+              <input type="text" id="userid_update" name="user_id" placeholder="Id..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="username_update">Username</label>
+              <input type="text" id="username_update" name="user_name" placeholder="Name..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="useremail_update">Email</label>
+              <input type="text" id="useremail_update" name="user_email" placeholder="Email..." class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="userpassword_update">Password</label>
+              <input type="text" id="userpassword_update" name="user_password" placeholder="Password..." class="form-control">
+            </div>
+          </div>
+          <div style="display:block;">
+            <button type="submit">Update</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
 </div>
 
-<div class="formcontainer">
-  <h3>Update User</h3>
-  <form id="form-update-user">
-    <div style="display:inline-block;">
-      <input type="text" name="user_id" placeholder="Id...">
-      <input type="text" name="user_name" placeholder="Name...">
-      <input type="text" name="user_email" placeholder="Email...">
-      <input type="text" name="user_password" placeholder="Password...">
+{{!-- {{#if users}}
+  <div class="user-content">
+    <h3>Users</h3>
+    <div>
+    {{#each users}}
+      {{> user-block}}
+    {{/each}}
     </div>
-    <div style="display:block;">
-      <button type="submit">Update</button>
+  </div>
+{{/if}} --}}
+
+{{!-- {{#if user}}
+  <div class="user-content-single">
+    <h3>User</h3>
+    <div>
+      {{#each user}}
+        {{> user-block}}
+      {{/each}}
     </div>
-  </form>
-</div>
+  </div>
+{{/if}} --}}
+

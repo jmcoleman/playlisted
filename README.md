@@ -59,7 +59,7 @@ Unit testing was done against all routes from end-to-end and functionally tested
 
 ## Deployment
 
-The project is deployed to Heroku pages at TBD
+The project is deployed to Heroku pages at https://rocky-brook-81163.herokuapp.com/
 
 ## Built With
 

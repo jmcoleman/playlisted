@@ -1,9 +1,3 @@
-const dotenv = require('dotenv').config();
-/*require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })      TODO (to keep from showing error in Heroku log)
-if (process.env.NODE_ENV !== 'production') {
-require('dotenv').load();
-}*/
-
 module.exports = 
 {
   "development": {
@@ -22,14 +16,6 @@ module.exports =
     "port": 3306,
     "dialect": "mysql"
   },
-  /*"production": {
-    "username": process.env.HEROKU_USERNAME,
-    "password": process.env.HEROKU_PASSWORD,
-    "database": process.env.HEROKU_DATABASE,
-    "host": process.env.HEROKU_HOST,
-    "port": process.env.HEROKU_PORT,
-    "dialect": "mysql"
-  }*/
   "production": {
     "use_env_variable": "JAWSDB_URL",
     "dialect": "mysql"
